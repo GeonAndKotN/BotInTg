@@ -28,7 +28,7 @@ namespace BotInTg
         }
         private static async Task HandlePollingErrorAsync(ITelegramBotClient client, Exception exception, CancellationToken token)
         {
-            await client.SendPhotoAsync(exception.Message, InputFile.FromUri(""), cancellationToken: token);
+            await client.SendPhotoAsync(exception.Message, InputFile.FromUri("https://github.com/GeonAndKotN/BotInTg/blob/master/BotInTg/Photo/Error.png"), caption: "Упс, кажется возникла ошибка, сообщите в службу поддержки о баге!", cancellationToken: token);
         }
 
         private static async Task HandleUpdateAsync(ITelegramBotClient client, Update update, CancellationToken token)
@@ -90,7 +90,7 @@ namespace BotInTg
             switch (update.CallbackQuery?.Data)
             {
                 case "lobbyback":
-                    await client.SendTextMessageAsync(update.CallbackQuery.From.Id, $"{leftblock}Вы вернулись в лобби!{rightblock}", replyMarkup: StartMenu, cancellationToken: token);
+                    await client.SendPhotoAsync(update.CallbackQuery.From.Id, InputFile.FromUri("https://github.com/GeonAndKotN/BotInTg/blob/master/BotInTg/Photo/HahaErrorMan.png"), caption: $"{leftblock}Вы вернулись в лобби!{rightblock}", replyMarkup: StartMenu, cancellationToken: token);
                     break;
                 case "TocnoBuy":
                     await client.SendTextMessageAsync(update.CallbackQuery.From.Id, $"{leftblock}Вы точно хотите купить {message} за {message} монет?{rightblock}", replyMarkup: YesOrNo, cancellationToken: token);
