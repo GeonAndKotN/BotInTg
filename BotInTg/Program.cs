@@ -5,17 +5,17 @@ using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using Telegram.Bot.Types;
 using static System.Net.Mime.MediaTypeNames;
+using System.Threading;
 
 namespace BotInTg
 {
     internal class Program
     {
+        //static Dictionary<long, ChatId> users = new Dictionary<long, ChatId>();
+
         private static async Task Main(string[] args)
         {
             var botClient = new TelegramBotClient("7140884239:AAFMcWNsUnDo7rFrDQGRlpYovz1C0KewLIQ");
-
-
-
 
             ReceiverOptions receiverOptions = new()
             {
@@ -24,11 +24,12 @@ namespace BotInTg
 
             botClient.StartReceiving(HandleUpdateAsync, HandlePollingErrorAsync);
             Console.WriteLine("Бот запущен!");
+            
             Console.ReadLine();
         }
         private static async Task HandlePollingErrorAsync(ITelegramBotClient client, Exception exception, CancellationToken token)
         {
-            await client.SendPhotoAsync(exception.Message, InputFile.FromUri("https://github.com/GeonAndKotN/BotInTg/blob/master/BotInTg/Photo/Error.png"), caption: "Упс, кажется возникла ошибка, сообщите в службу поддержки о баге!", cancellationToken: token);
+            await client.SendPhotoAsync(exception.Message, InputFile.FromUri("https://raw.githubusercontent.com/GeonAndKotN/BotInTg/master/BotInTg/Photo/HahaErrorMan.png"), caption: "Упс, кажется возникла ошибка, сообщите в службу поддержки о баге!", cancellationToken: token);
         }
 
         private static async Task HandleUpdateAsync(ITelegramBotClient client, Update update, CancellationToken token)
@@ -87,10 +88,18 @@ namespace BotInTg
                 });
             string leftblock = "-------------------------------------------------------------\n";
             string rightblock = "\n-------------------------------------------------------------";
+
+            //if (message?.Text != null)
+            //    await client.DeleteMessageAsync(chatId: message.Chat.Id, messageId: message.MessageId - 1, cancellationToken: token);
+
+            /*if (update.CallbackQuery?.Data != null)
+                await client.DeleteMessageAsync(chatId: message.Chat.Id, messageId: message.MessageId - 1, cancellationToken: token);
+            */
+
             switch (update.CallbackQuery?.Data)
             {
                 case "lobbyback":
-                    await client.SendPhotoAsync(update.CallbackQuery.From.Id, InputFile.FromUri("https://github.com/GeonAndKotN/BotInTg/blob/master/BotInTg/Photo/HahaErrorMan.png"), caption: $"{leftblock}Вы вернулись в лобби!{rightblock}", replyMarkup: StartMenu, cancellationToken: token);
+                    await client.SendPhotoAsync(update.CallbackQuery.From.Id, InputFile.FromUri("https://img.freepik.com/premium-photo/cool-stylish-british-hipster-cat-with-fashionable-vintage-round-sunglasses-black-hat-studio-gray-background-creative-idea-fashion_338491-12633.jpg?w=826"), caption: $"{leftblock}Вы вернулись в лобби!{rightblock}", replyMarkup: StartMenu, cancellationToken: token);
                     break;
                 case "TocnoBuy":
                     await client.SendTextMessageAsync(update.CallbackQuery.From.Id, $"{leftblock}Вы точно хотите купить {message} за {message} монет?{rightblock}", replyMarkup: YesOrNo, cancellationToken: token);
@@ -109,7 +118,7 @@ namespace BotInTg
                     break;
             }
 
-
+            
             switch (update.Message?.Text?.ToLower())
             {
                 case "/start":
@@ -128,6 +137,8 @@ namespace BotInTg
                     await client.SendTextMessageAsync(message.Chat.Id, $"{leftblock}Выберите уровень, куда хотите спуститься{rightblock}", replyMarkup: LevelCaves);
                     break;
             }
+            Console.WriteLine($"Received a '{message?.Text}' message in chat {message?.Chat.Id}. From " +
+                $"{message?.Chat.FirstName} {message?.Chat.LastName}");
         }
     }
 }

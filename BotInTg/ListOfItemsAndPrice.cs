@@ -10,6 +10,7 @@ namespace BotInTg
     {
         public List<string> Items = new List<string>();
 
+        public List<string> Photo = new List<string>();
 
     }
 }
