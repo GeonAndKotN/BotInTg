@@ -6,13 +6,12 @@ using Telegram.Bot.Types.ReplyMarkups;
 using Telegram.Bot.Types;
 using static System.Net.Mime.MediaTypeNames;
 using System.Threading;
+using BotInTg.DungeonLevels;
 
 namespace BotInTg
 {
     internal class Program
     {
-        //static Dictionary<long, ChatId> users = new Dictionary<long, ChatId>();
-
         private static async Task Main(string[] args)
         {
             var botClient = new TelegramBotClient("7140884239:AAFMcWNsUnDo7rFrDQGRlpYovz1C0KewLIQ");
@@ -32,11 +31,10 @@ namespace BotInTg
             await client.SendPhotoAsync(exception.Message, InputFile.FromUri("https://raw.githubusercontent.com/GeonAndKotN/BotInTg/master/BotInTg/Photo/HahaErrorMan.png"), caption: "Упс, кажется возникла ошибка, сообщите в службу поддержки о баге!", cancellationToken: token);
         }
 
-        private static async Task HandleUpdateAsync(ITelegramBotClient client, Update update, CancellationToken token)
+        public static async Task HandleUpdateAsync(ITelegramBotClient client, Update update, CancellationToken token)
         {
-                var message = update.Message;
+            var message = update.Message;
             int DungLevel = 1;
-            //var messageText = message.Text;
 
             ReplyKeyboardMarkup StartMenu = new(new[] { new KeyboardButton[] { "💰магазин💰" }, new KeyboardButton[] { "🧟Спуск🧟" } })
             {
@@ -89,13 +87,6 @@ namespace BotInTg
             string leftblock = "-------------------------------------------------------------\n";
             string rightblock = "\n-------------------------------------------------------------";
 
-            //if (message?.Text != null)
-            //    await client.DeleteMessageAsync(chatId: message.Chat.Id, messageId: message.MessageId - 1, cancellationToken: token);
-
-            /*if (update.CallbackQuery?.Data != null)
-                await client.DeleteMessageAsync(chatId: message.Chat.Id, messageId: message.MessageId - 1, cancellationToken: token);
-            */
-
             switch (update.CallbackQuery?.Data)
             {
                 case "lobbyback":
@@ -140,5 +131,6 @@ namespace BotInTg
             Console.WriteLine($"Received a '{message?.Text}' message in chat {message?.Chat.Id}. From " +
                 $"{message?.Chat.FirstName} {message?.Chat.LastName}");
         }
+
     }
 }
