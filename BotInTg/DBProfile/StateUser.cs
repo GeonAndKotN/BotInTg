@@ -10,7 +10,7 @@ namespace BotInTg.DBProfile
     public abstract class StateUser
     {
         public int StateID { get; set; }
-        public abstract void UserState(ITelegramBotClient botClient, long id, string message);
+        public abstract void UserStateAsync(ITelegramBotClient botClient, long id, string message);
     }
 }
 

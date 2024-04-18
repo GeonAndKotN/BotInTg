@@ -7,25 +7,28 @@ using Telegram.Bot.Types;
 using static System.Net.Mime.MediaTypeNames;
 using System.Threading;
 using BotInTg.DungeonLevels;
+using BotInTg.DBProfile;
+using System.Security.Cryptography.X509Certificates;
 
 namespace BotInTg
 {
-    internal class Program
+    internal class Program : RegistrationUser
     {
+        public class UserData
+        {
+            public static Dictionary<long, Player> Users = new Dictionary<long, Player>();
+        }
         private static async Task Main(string[] args)
         {
             var botClient = new TelegramBotClient("7140884239:AAFMcWNsUnDo7rFrDQGRlpYovz1C0KewLIQ");
 
-            ReceiverOptions receiverOptions = new()
-            {
-                AllowedUpdates = Array.Empty<UpdateType>()
-            };
-
             botClient.StartReceiving(HandleUpdateAsync, HandlePollingErrorAsync);
             Console.WriteLine("Бот запущен!");
-            
+
             Console.ReadLine();
         }
+
+
         private static async Task HandlePollingErrorAsync(ITelegramBotClient client, Exception exception, CancellationToken token)
         {
             await client.SendPhotoAsync(exception.Message, InputFile.FromUri("https://raw.githubusercontent.com/GeonAndKotN/BotInTg/master/BotInTg/Photo/HahaErrorMan.png"), caption: "Упс, кажется возникла ошибка, сообщите в службу поддержки о баге!", cancellationToken: token);
@@ -33,6 +36,23 @@ namespace BotInTg
 
         public static async Task HandleUpdateAsync(ITelegramBotClient client, Update update, CancellationToken token)
         {
+            var msg = update.Message;
+            var users = UserData.Users;
+
+            if (users.ContainsKey(msg.Chat.Id))
+            {
+                await client.SendTextMessageAsync(update.Message.Chat.Id, "meowmeowmeowmeow");
+                _ = users[msg.Chat.Id];
+            }
+            else
+            {
+                Console.WriteLine(msg.Chat.Id);
+                await client.SendTextMessageAsync(update.Message.Chat.Id, "dadadad");
+                RegistrationUser registrationUser = new RegistrationUser();
+            }
+        }
+        
+        /*{
             var message = update.Message;
             int DungLevel = 1;
 
@@ -106,6 +126,7 @@ namespace BotInTg
                 case "clvl3":
                     DungLevel = 3;
                     await client.SendTextMessageAsync(update.CallbackQuery.From.Id, $"{leftblock}Вы точно хотите спуститься в шахту {DungLevel} уровня?{rightblock}", replyMarkup: YesOrNo, cancellationToken: token);
+                    
                     break;
             }
 
@@ -119,18 +140,21 @@ namespace BotInTg
                             "\nВ данной игре не будет классов, вы можете быть кем угодно и прокачивать какие угодно навыки" +
                             "\n\nЗа помощью писать в этот чат - https://t.me/+WKfhhZfDpLRhOTky" +
                             "\n\nДля начала вам надо будет выбрать имя своего персонажа, введите ваше имя", replyMarkup: StartMenu);
-                        break;
+                    //UserData.Users[update.Id].State = new RegistrationUser();
+                    return;
 
                 case "💰магазин💰":
                     await client.SendTextMessageAsync(message.Chat.Id, $"{leftblock}Вы зашли в магазин, выберите товар!{rightblock}", replyMarkup: ShopGood);
                     break;
                 case "🧟спуск🧟":
                     await client.SendTextMessageAsync(message.Chat.Id, $"{leftblock}Выберите уровень, куда хотите спуститься{rightblock}", replyMarkup: LevelCaves);
+
                     break;
             }
             Console.WriteLine($"Received a '{message?.Text}' message in chat {message?.Chat.Id}. From " +
                 $"{message?.Chat.FirstName} {message?.Chat.LastName}");
         }
+        */
 
     }
 }

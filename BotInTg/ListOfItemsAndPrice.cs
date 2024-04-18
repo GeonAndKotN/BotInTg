@@ -8,11 +8,9 @@ namespace BotInTg
 {
     public class ListOfItemsAndPrice
     {
-        Dictionary<string, int> items = new Dictionary<string, int>()
+        Dictionary<string, int> item = new Dictionary<string, int>()
         {
-            ["Капуста"] = 5,
-            ["Яблоко"] = 4,
-            ["Банан"] = 2
+            
         };
     }
 }

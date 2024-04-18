@@ -10,7 +10,7 @@ namespace BotInTg.DungeonLevels
 {
     public class ThirdLevelState : StateUser
     {
-        public override void UserState(ITelegramBotClient botClient, long id, string message)
+        public override void UserStateAsync(ITelegramBotClient botClient, long id, string message)
         {
             throw new NotImplementedException();
         }

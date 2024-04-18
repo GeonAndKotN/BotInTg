@@ -10,11 +10,10 @@ namespace BotInTg.DBProfile;
 public class Player
 {
     public int StateID { get; set; }
+
     public long ChatId { get; set; }
+
     public string Nick { get; set; }
+
     public StateUser State { get; set; }
-}
-public class UserData
-{
-    public static Dictionary<long, Player> Users = new Dictionary<long, Player>();
 }
